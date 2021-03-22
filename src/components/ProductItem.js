@@ -26,7 +26,7 @@ export default function ProductItem({ product }) {
                     </Link>
                     <span
                         className="text-gray">
-                        USD {product.price}.00
+                        USD {product.price[0][0]}.00
                     </span>
                 </div>
             </div>

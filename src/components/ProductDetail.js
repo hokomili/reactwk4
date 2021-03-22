@@ -6,10 +6,18 @@ import AddToCart from "./AddToCart"
 const { Option } = Select;
 
 function ProductDetail({ product }) {
-   const [qty, setQty] = useState(product.countInStock > 0 ? 1 : 0);
+   const [typ, setTyp] = useState(0);
+   const [clr, setClr] = useState(0);
+   const [qty, setQty] = useState(product.countInStock[0] > 0 ? 1 : 0);
    const handleChange = value => {
       setQty(value);
     };
+   const typeChange = valu => {
+      setTyp(valu);
+   };
+   const colorChange = val => {
+      setClr(val);
+   };
 
    useEffect(()=>{
       console.log(`The selected qty = ${qty}`)
@@ -39,19 +47,47 @@ function ProductDetail({ product }) {
             <p className="product-description">{product.description_long}</p>
             <div className="product-price-wrap">
                <p className="product-price product-price--large">
-                  US${product.price}.00
+                  US${product.price[clr][typ]}.00
                </p>
                <p className="product-status">
-                  Status: {product.countInStock > 0 ? "In Stock" : "Unavailable."}
+                  Status: {product.countInStock[clr][typ] > 0 ? "In Stock" : "Unavailable."}
                </p>
                <p className="product-qty">
-                  Qty: {"   "}
+                  Color: {"   "}
+                  <Select 
+                     defaultValue={clr} 
+                     className="select-style"
+                     onChange={colorChange}
+                  >
+                     {[...Array(product.color.length).keys()].map((x) => (
+                        <Option key={x} value={x}>
+                           {product.color[x]}
+                        </Option>
+                     ))}
+                  </Select>
+               </p>
+               <p className="product-qty">
+                  Type: {"   "}
+                  <Select 
+                     defaultValue={typ} 
+                     className="select-style"
+                     onChange={typeChange}
+                  >
+                     {[...Array(product.type.length).keys()].map((x) => (
+                        <Option key={x} value={x}>
+                           {product.type[x]}
+                        </Option>
+                     ))}
+                  </Select>
+               </p>
+               <p className="product-qty">
+                  Quantity: {"   "}
                   <Select 
                      defaultValue={qty} 
                      className="select-style"
                      onChange={handleChange}
                   >
-                     {[...Array(product.countInStock).keys()].map((x) => (
+                     {[...Array(product.countInStock[clr][typ]).keys()].map((x) => (
                         <Option key={x + 1} value={x + 1}>
                            {x + 1}
                         </Option>
@@ -59,7 +95,7 @@ function ProductDetail({ product }) {
                   </Select>
                </p>
                <p className="product-qty">
-                  Total Price: {product.price * qty}
+                  Total Price: {product.price[clr][typ] * qty}
                </p>               
                <AddToCart />
             </div>
