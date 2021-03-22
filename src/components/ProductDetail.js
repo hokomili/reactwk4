@@ -95,9 +95,12 @@ function ProductDetail({ product }) {
                   </Select>
                </p>
                <p className="product-qty">
+
                   Total Price: {product.price[clr][typ] * qty}
-               </p>               
-               <AddToCart />
+               </p>
+                  {[(product.countInStock[clr][typ])].map((x) => (
+                        product.countInStock[clr][typ] > 0 ? <AddToCart /> :  <p />
+                  ))}               
             </div>
          </div>           
         </Col>
